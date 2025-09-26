@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>湘土施肥宝 - Web演示版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 30px 0 40px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-field, .select-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus, .select-field:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 0 8px;
+        }
+
+        .tips-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .tips-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 12px;
+        }
+
+        .tips-content {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .result-page {
+            display: none;
+        }
+
+        .result-header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
+
+        .result-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .fertilizer-table {
+            width: 100%;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid #e0e0e0;
+            margin-top: 12px;
+        }
+
+        .table-header {
+            display: flex;
+            background: #f5f5f5;
+            font-weight: bold;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .table-row {
+            display: flex;
+            border-top: 1px solid #e0e0e0;
+            font-size: 13px;
+        }
+
+        .table-row:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .col-nutrient {
+            flex: 1.2;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .col-supplement, .col-fertilizer, .col-total {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        .nutrient-n { color: #2196F3; }
+        .nutrient-p { color: #FF9800; }
+        .nutrient-k { color: #9C27B0; }
+
+        .diagnosis-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .success {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .advice-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            white-space: pre-line;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .action-buttons .btn-secondary,
+        .action-buttons .btn-primary {
+            flex: 1;
+            margin: 0;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .disclaimer-text {
+            font-size: 12px;
+            color: #856404;
+            line-height: 1.4;
+        }
+
+        .error-text {
+            color: #f44336;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 首页 -->
+        <div id="indexPage" class="index-page">
+            <div class="page-header">
+                <div class="page-title">🌾 湘土施肥宝</div>
+                <div class="page-subtitle">科学施肥，精准增产</div>
+            </div>
+
+            <div class="card">
+                <div class="input-group">
+                    <label class="input-label">选择作物</label>
+                    <select id="cropSelect" class="select-field">
+                        <option value="水稻">水稻</option>
+                        <option value="油菜">油菜</option>
+                        <option value="玉米">玉米</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">土壤养分检测值</div>
+                
+                <div class="input-group">
+                    <label class="input-label">速效氮 (mg/kg)</label>
+                    <input type="number" id="soilN" class="input-field" placeholder="如：90">
+                    <div id="soilNError" class="error-text"></div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">速效磷 (mg/kg)</label>
+                    <input type="number" id="soilP" class="input-field" placeholder="如：15">
+                    <div id="soilPError" class="error-text"></div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">速效钾 (mg/kg)</label>
+                    <input type="number" id="soilK" class="input-field" placeholder="如：120">
+                    <div id="soilKError" class="error-text"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">种植信息</div>
+                
+                <div class="input-group">
+                    <label class="input-label">目标产量 (kg/亩)</label>
+                    <input type="number" id="targetYield" class="input-field" value="500">
+                    <div id="targetYieldError" class="error-text"></div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">种植面积 (亩)</label>
+                    <input type="number" id="area" class="input-field" value="1.0" step="0.1">
+                    <div id="areaError" class="error-text"></div>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="generatePlan()">生成施肥方案</button>
+
+            <div class="tips-card">
+                <div class="tips-title">💡 使用提示</div>
+                <div class="tips-content">
+                    • 请先进行土壤检测，获取准确的养分数据<br>
+                    • 推荐方案仅供参考，请结合田间实际情况调整<br>
+                    • 建议配合有机肥使用，效果更佳
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页 -->
+        <div id="resultPage" class="result-page">
+            <div class="result-header">
+                <div class="result-title">🌾 推荐施肥方案</div>
+                <div id="resultSubtitle" class="result-subtitle"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📊 推荐施肥量</div>
+                <div class="fertilizer-table">
+                    <div class="table-header">
+                        <div class="col-nutrient">养分类型</div>
+                        <div class="col-supplement">需补量(kg/亩)</div>
+                        <div class="col-fertilizer">推荐肥料(kg/亩)</div>
+                        <div class="col-total">总用量(kg)</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="col-nutrient nutrient-n">氮(N)</div>
+                        <div id="nSupplement" class="col-supplement">-</div>
+                        <div id="ureaAmount" class="col-fertilizer">-</div>
+                        <div id="ureaTotal" class="col-total">-</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="col-nutrient nutrient-p">磷(P₂O₅)</div>
+                        <div id="pSupplement" class="col-supplement">-</div>
+                        <div id="phosphateAmount" class="col-fertilizer">-</div>
+                        <div id="phosphateTotal" class="col-total">-</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="col-nutrient nutrient-k">钾(K₂O)</div>
+                        <div id="kSupplement" class="col-supplement">-</div>
+                        <div id="potassiumAmount" class="col-fertilizer">-</div>
+                        <div id="potassiumTotal" class="col-total">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🔍 土壤诊断</div>
+                <div id="diagnosisContent"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💡 施肥建议</div>
+                <div id="adviceContent" class="advice-text"></div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-secondary" onclick="backToIndex()">重新计算</button>
+                <button class="btn-primary" onclick="copyResult()">复制方案</button>
+            </div>
+
+            <div class="disclaimer">
+                <div class="disclaimer-text">
+                    ⚠️ 推荐方案仅供参考，请结合田间实际情况调整。建议咨询当地农技专家获得更精准的指导。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 作物配置数据
+        const cropConfig = {
+            '水稻': {
+                defaultYield: 500,
+                nRequirement: 18,
+                pRequirement: 8,
+                kRequirement: 12,
+                nRatio: { base: 0.6, topdress: 0.4 }
+            },
+            '油菜': {
+                defaultYield: 200,
+                nRequirement: 12,
+                pRequirement: 6,
+                kRequirement: 10,
+                nRatio: { base: 0.7, topdress: 0.3 }
+            },
+            '玉米': {
+                defaultYield: 600,
+                nRequirement: 20,
+                pRequirement: 10,
+                kRequirement: 15,
+                nRatio: { base: 0.5, topdress: 0.5 }
+            }
+        };
+
+        // 肥料养分含量
+        const fertilizerContent = {
+            urea: 0.46,
+            superphosphate: 0.12,
+            potassiumChloride: 0.60
+        };
+
+        // 土壤养分等级标准
+        const nutrientLevels = {
+            N: { low: 100, medium: 150, high: 200 },
+            P: { low: 20, medium: 40, high: 60 },
+            K: { low: 100, medium: 150, high: 200 }
+        };
+
+        // 作物选择变化
+        document.getElementById('cropSelect').addEventListener('change', function() {
+            const crop = this.value;
+            const config = cropConfig[crop];
+            document.getElementById('targetYield').value = config.defaultYield;
+        });
+
+        // 表单验证
+        function validateForm() {
+            const fields = ['soilN', 'soilP', 'soilK', 'targetYield', 'area'];
+            let isValid = true;
+
+            fields.forEach(field => {
+                const input = document.getElementById(field);
+                const errorDiv = document.getElementById(field + 'Error');
+                const value = parseFloat(input.value);
+
+                if (!input.value || value <= 0) {
+                    errorDiv.textContent = '请输入有效数值';
+                    input.style.borderColor = '#f44336';
+                    isValid = false;
+                } else {
+                    errorDiv.textContent = '';
+                    input.style.borderColor = '#e0e0e0';
+                }
+            });
+
+            return isValid;
+        }
+
+        // 生成施肥方案
+        function generatePlan() {
+            if (!validateForm()) {
+                alert('请检查输入信息');
+                return;
+            }
+
+            const crop = document.getElementById('cropSelect').value;
+            const targetYield = parseFloat(document.getElementById('targetYield').value);
+            const soilN = parseFloat(document.getElementById('soilN').value);
+            const soilP = parseFloat(document.getElementById('soilP').value);
+            const soilK = parseFloat(document.getElementById('soilK').value);
+            const area = parseFloat(document.getElementById('area').value);
+
+            const result = calculateFertilizer({
+                crop, targetYield, soilN, soilP, soilK, area
+            });
+
+            displayResult(result);
+        }
+
+        // 施肥计算算法
+        function calculateFertilizer(params) {
+            const { crop, targetYield, soilN, soilP, soilK, area } = params;
+            const config = cropConfig[crop];
+
+            // 计算养分需求量
+            const yieldRatio = targetYield / config.defaultYield;
+            const nNeed = config.nRequirement * yieldRatio;
+            const pNeed = config.pRequirement * yieldRatio;
+            const kNeed = config.kRequirement * yieldRatio;
+
+            // 计算土壤供应量
+            const nSupply = soilN * 0.15 / 1000;
+            const pSupply = soilP * 0.1 / 1000;
+            const kSupply = soilK * 0.12 / 1000;
+
+            // 计算需补充的纯养分量
+            const nSupplement = Math.max(0, nNeed - nSupply);
+            const pSupplement = Math.max(0, pNeed - pSupply);
+            const kSupplement = Math.max(0, kNeed - kSupply);
+
+            // 计算肥料用量
+            const ureaAmount = nSupplement / fertilizerContent.urea;
+            const superphosphateAmount = pSupplement / fertilizerContent.superphosphate;
+            const potassiumChlorideAmount = kSupplement / fertilizerContent.potassiumChloride;
+
+            // 生成诊断和建议
+            const diagnosis = generateDiagnosis(soilN, soilP, soilK);
+            const advice = generateAdvice(crop, config.nRatio);
+
+            return {
+                crop, targetYield, area,
+                supplements: {
+                    N: parseFloat(nSupplement.toFixed(1)),
+                    P: parseFloat(pSupplement.toFixed(1)),
+                    K: parseFloat(kSupplement.toFixed(1))
+                },
+                fertilizers: {
+                    urea: {
+                        perMu: parseFloat(ureaAmount.toFixed(1)),
+                        total: parseFloat((ureaAmount * area).toFixed(1))
+                    },
+                    superphosphate: {
+                        perMu: parseFloat(superphosphateAmount.toFixed(1)),
+                        total: parseFloat((superphosphateAmount * area).toFixed(1))
+                    },
+                    potassiumChloride: {
+                        perMu: parseFloat(potassiumChlorideAmount.toFixed(1)),
+                        total: parseFloat((potassiumChlorideAmount * area).toFixed(1))
+                    }
+                },
+                diagnosis, advice
+            };
+        }
+
+        // 生成诊断
+        function generateDiagnosis(soilN, soilP, soilK) {
+            const diagnosis = [];
+
+            if (soilN < nutrientLevels.N.low) {
+                diagnosis.push(`⚠️ 氮素偏低（${soilN} mg/kg），可能导致植株矮小、分蘖少，建议增施氮肥`);
+            } else if (soilN > nutrientLevels.N.high) {
+                diagnosis.push(`✅ 氮素充足（${soilN} mg/kg），植株生长良好`);
+            }
+
+            if (soilP < nutrientLevels.P.low) {
+                diagnosis.push(`⚠️ 磷素偏低（${soilP} mg/kg），可能影响根系发育和开花，建议增施磷肥`);
+            } else if (soilP > nutrientLevels.P.high) {
+                diagnosis.push(`✅ 磷素充足（${soilP} mg/kg），根系发育良好`);
+            }
+
+            if (soilK < nutrientLevels.K.low) {
+                diagnosis.push(`⚠️ 钾素偏低（${soilK} mg/kg），可能导致抗逆性差、籽粒不饱满，建议增施钾肥`);
+            } else if (soilK > nutrientLevels.K.high) {
+                diagnosis.push(`✅ 钾素充足（${soilK} mg/kg），抗逆性强`);
+            }
+
+            return diagnosis;
+        }
+
+        // 生成建议
+        function generateAdvice(crop, nRatio) {
+            const baseRatio = Math.round(nRatio.base * 100);
+            const topdressRatio = Math.round(nRatio.topdress * 100);
+
+            return [
+                `氮肥：${baseRatio}%作基肥，${topdressRatio}%在分蘖期追施`,
+                `磷钾肥：全部作基肥一次性施用`,
+                `建议配合腐熟有机肥1000-1500kg/亩，提高土壤活性`,
+                `注意根据天气和作物长势适当调整用量`
+            ].join('\n');
+        }
+
+        // 显示结果
+        function displayResult(result) {
+            document.getElementById('resultSubtitle').textContent = 
+                `${result.crop} (${result.targetYield}kg/亩 × ${result.area}亩)`;
+
+            document.getElementById('nSupplement').textContent = result.supplements.N;
+            document.getElementById('ureaAmount').textContent = `尿素 ${result.fertilizers.urea.perMu}`;
+            document.getElementById('ureaTotal').textContent = result.fertilizers.urea.total;
+
+            document.getElementById('pSupplement').textContent = result.supplements.P;
+            document.getElementById('phosphateAmount').textContent = `过磷酸钙 ${result.fertilizers.superphosphate.perMu}`;
+            document.getElementById('phosphateTotal').textContent = result.fertilizers.superphosphate.total;
+
+            document.getElementById('kSupplement').textContent = result.supplements.K;
+            document.getElementById('potassiumAmount').textContent = `氯化钾 ${result.fertilizers.potassiumChloride.perMu}`;
+            document.getElementById('potassiumTotal').textContent = result.fertilizers.potassiumChloride.total;
+
+            // 显示诊断
+            const diagnosisHtml = result.diagnosis.map(item => {
+                const className = item.includes('⚠️') ? 'warning' : 'success';
+                return `<div class="diagnosis-item ${className}">${item}</div>`;
+            }).join('');
+            document.getElementById('diagnosisContent').innerHTML = diagnosisHtml;
+
+            document.getElementById('adviceContent').textContent = result.advice;
+
+            // 切换页面
+            document.getElementById('indexPage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+
+            // 保存结果用于复制
+            window.currentResult = result;
+        }
+
+        // 返回首页
+        function backToIndex() {
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('indexPage').style.display = 'block';
+        }
+
+        // 复制结果
+        function copyResult() {
+            const result = window.currentResult;
+            if (!result) return;
+
+            let text = `🌾 ${result.crop}施肥方案\n`;
+            text += `目标产量：${result.targetYield}kg/亩 × ${result.area}亩\n\n`;
+            
+            text += `📊 推荐施肥量：\n`;
+            text += `氮肥(N)：${result.supplements.N}kg/亩 → 尿素 ${result.fertilizers.urea.perMu}kg/亩 (总计${result.fertilizers.urea.total}kg)\n`;
+            text += `磷肥(P₂O₅)：${result.supplements.P}kg/亩 → 过磷酸钙 ${result.fertilizers.superphosphate.perMu}kg/亩 (总计${result.fertilizers.superphosphate.total}kg)\n`;
+            text += `钾肥(K₂O)：${result.supplements.K}kg/亩 → 氯化钾 ${result.fertilizers.potassiumChloride.perMu}kg/亩 (总计${result.fertilizers.potassiumChloride.total}kg)\n\n`;
+            
+            if (result.diagnosis.length > 0) {
+                text += `🔍 土壤诊断：\n`;
+                result.diagnosis.forEach(item => {
+                    text += `${item}\n`;
+                });
+                text += `\n`;
+            }
+            
+            text += `💡 施肥建议：\n${result.advice}\n\n`;
+            text += `⚠️ 本方案仅供参考，请结合实际情况调整\n`;
+            text += `📱 来源：湘土施肥宝`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('施肥方案已复制到剪贴板！');
+            }).catch(() => {
+                // 降级处理
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('施肥方案已复制到剪贴板！');
+            });
+        }
+    </script>
+</body>
+</html>

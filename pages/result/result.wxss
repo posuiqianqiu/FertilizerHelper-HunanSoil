@@ -1,0 +1,172 @@
+/* 结果页样式 */
+
+.result-header {
+  text-align: center;
+  padding: 32rpx 0 40rpx;
+}
+
+.result-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #4CAF50;
+  margin-bottom: 12rpx;
+}
+
+.result-subtitle {
+  font-size: 28rpx;
+  color: #666;
+}
+
+/* 施肥量表格 */
+.fertilizer-table {
+  width: 100%;
+  border-radius: 8rpx;
+  overflow: hidden;
+  border: 2rpx solid #e0e0e0;
+}
+
+.table-header {
+  display: flex;
+  background: #f5f5f5;
+  font-weight: bold;
+  font-size: 24rpx;
+  color: #333;
+}
+
+.table-row {
+  display: flex;
+  border-top: 1rpx solid #e0e0e0;
+  font-size: 26rpx;
+}
+
+.table-row:nth-child(even) {
+  background: #fafafa;
+}
+
+.col-nutrient {
+  flex: 1.2;
+  padding: 20rpx 12rpx;
+  text-align: center;
+  font-weight: bold;
+}
+
+.col-supplement {
+  flex: 1;
+  padding: 20rpx 12rpx;
+  text-align: center;
+}
+
+.col-fertilizer {
+  flex: 1.5;
+  padding: 20rpx 12rpx;
+  text-align: center;
+}
+
+.col-total {
+  flex: 1;
+  padding: 20rpx 12rpx;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* 养分类型颜色 */
+.nutrient-n {
+  color: #2196F3;
+}
+
+.nutrient-p {
+  color: #FF9800;
+}
+
+.nutrient-k {
+  color: #9C27B0;
+}
+
+/* 诊断列表 */
+.diagnosis-list {
+  margin-top: 16rpx;
+}
+
+.diagnosis-item {
+  padding: 16rpx;
+  margin-bottom: 12rpx;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.diagnosis-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 施肥建议 */
+.advice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle-icon {
+  font-size: 24rpx;
+  color: #999;
+  transition: transform 0.3s ease;
+}
+
+.advice-content {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #e0e0e0;
+}
+
+.advice-text {
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: #333;
+  white-space: pre-line;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 24rpx;
+  margin: 40rpx 0;
+}
+
+.action-buttons .btn-secondary,
+.action-buttons .btn-primary {
+  flex: 1;
+  margin: 0;
+}
+
+/* 免责声明 */
+.disclaimer {
+  background: #fff3cd;
+  border: 2rpx solid #ffeaa7;
+  border-radius: 8rpx;
+  padding: 24rpx;
+  margin-top: 32rpx;
+}
+
+.disclaimer-text {
+  font-size: 24rpx;
+  color: #856404;
+  line-height: 1.5;
+}
+
+/* 错误状态 */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+}
+
+.error-text {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 40rpx;
+}

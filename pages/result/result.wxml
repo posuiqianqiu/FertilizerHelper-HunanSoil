@@ -1,0 +1,93 @@
+<view class="container" wx:if="{{result}}">
+  
+  <!-- 方案标题 -->
+  <view class="result-header">
+    <text class="result-title">🌾 推荐施肥方案</text>
+    <text class="result-subtitle">{{result.crop}} ({{result.targetYield}}kg/亩 × {{result.area}}亩)</text>
+  </view>
+
+  <!-- 核心施肥量表格 -->
+  <view class="card">
+    <view class="card-title">📊 推荐施肥量</view>
+    
+    <view class="fertilizer-table">
+      <view class="table-header">
+        <text class="col-nutrient">养分类型</text> 
+        <text class="col-supplement">需补量(kg/亩)</text>
+        <text class="col-fertilizer">推荐肥料(kg/亩)</text>
+        <text class="col-total">总用量(kg)</text>
+      </view>
+      
+      <view class="table-row">
+        <text class="col-nutrient nutrient-n">氮(N)</text>
+        <text class="col-supplement">{{result.supplements.N}}</text>
+        <text class="col-fertilizer">尿素 {{result.fertilizers.urea.perMu}}</text>
+        <text class="col-total">{{result.fertilizers.urea.total}}</text>
+      </view>
+      
+      <view class="table-row">
+        <text class="col-nutrient nutrient-p">磷(P₂O₅)</text>
+        <text class="col-supplement">{{result.supplements.P}}</text>
+        <text class="col-fertilizer">过磷酸钙 {{result.fertilizers.superphosphate.perMu}}</text>
+        <text class="col-total">{{result.fertilizers.superphosphate.total}}</text>
+      </view>
+      
+      <view class="table-row">
+        <text class="col-nutrient nutrient-k">钾(K₂O)</text>
+        <text class="col-supplement">{{result.supplements.K}}</text>
+        <text class="col-fertilizer">氯化钾 {{result.fertilizers.potassiumChloride.perMu}}</text>
+        <text class="col-total">{{result.fertilizers.potassiumChloride.total}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 缺素诊断 -->
+  <view class="card" wx:if="{{result.diagnosis.length > 0}}">
+    <view class="card-title">🔍 土壤诊断</view>
+    <view class="diagnosis-list">
+      <view 
+        class="diagnosis-item {{item.indexOf('⚠️') > -1 ? 'warning' : 'success'}}"
+        wx:for="{{result.diagnosis}}" 
+        wx:key="index"
+      >
+        {{item}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 施肥建议 -->
+  <view class="card">
+    <view class="advice-header" bindtap="toggleAdvice">
+      <text class="card-title">💡 施肥建议</text>
+      <text class="toggle-icon">{{showAdvice ? '▼' : '▶'}}</text>
+    </view>
+    
+    <view class="advice-content" wx:if="{{showAdvice}}">
+      <text class="advice-text">{{result.advice}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="btn-secondary" bindtap="recalculate">
+      重新计算
+    </button>
+    <button class="btn-primary" bindtap="copyResult">
+      复制方案
+    </button>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">
+      ⚠️ 推荐方案仅供参考，请结合田间实际情况调整。建议咨询当地农技专家获得更精准的指导。
+    </text>
+  </view>
+
+</view>
+
+<!-- 加载失败提示 -->
+<view class="error-container" wx:else>
+  <text class="error-text">数据加载失败，请返回重试</text>
+  <button class="btn-primary" bindtap="recalculate">返回首页</button>
+</view>

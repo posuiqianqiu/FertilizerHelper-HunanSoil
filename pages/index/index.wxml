@@ -1,0 +1,112 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">🌾 湘土施肥宝</text>
+    <text class="page-subtitle">科学施肥，精准增产</text>
+  </view>
+
+  <!-- 输入表单 -->
+  <view class="form-container">
+    
+    <!-- 作物选择 -->
+    <view class="card">
+      <view class="input-group">
+        <text class="input-label">选择作物</text>
+        <picker bindchange="onCropChange" value="{{cropIndex}}" range="{{crops}}">
+          <view class="picker-display">
+            <text>{{crops[cropIndex]}}</text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 土壤养分输入 -->
+    <view class="card">
+      <view class="card-title">土壤养分检测值</view>
+      
+      <view class="input-group">
+        <text class="input-label">速效氮 (mg/kg)</text>
+        <input 
+          class="input-field {{errors.soilN ? 'input-error' : ''}}"
+          type="digit"
+          placeholder="如：90"
+          value="{{formData.soilN}}"
+          data-field="soilN"
+          bindinput="onInputChange"
+        />
+        <text wx:if="{{errors.soilN}}" class="error-text">{{errors.soilN}}</text>
+      </view>
+
+      <view class="input-group">
+        <text class="input-label">速效磷 (mg/kg)</text>
+        <input 
+          class="input-field {{errors.soilP ? 'input-error' : ''}}"
+          type="digit"
+          placeholder="如：15"
+          value="{{formData.soilP}}"
+          data-field="soilP"
+          bindinput="onInputChange"
+        />
+        <text wx:if="{{errors.soilP}}" class="error-text">{{errors.soilP}}</text>
+      </view>
+
+      <view class="input-group">
+        <text class="input-label">速效钾 (mg/kg)</text>
+        <input 
+          class="input-field {{errors.soilK ? 'input-error' : ''}}"
+          type="digit"
+          placeholder="如：120"
+          value="{{formData.soilK}}"
+          data-field="soilK"
+          bindinput="onInputChange"
+        />
+        <text wx:if="{{errors.soilK}}" class="error-text">{{errors.soilK}}</text>
+      </view>
+    </view>
+
+    <!-- 种植信息 -->
+    <view class="card">
+      <view class="card-title">种植信息</view>
+      
+      <view class="input-group">
+        <text class="input-label">目标产量 (kg/亩)</text>
+        <input 
+          class="input-field {{errors.targetYield ? 'input-error' : ''}}"
+          type="digit"
+          value="{{formData.targetYield}}"
+          data-field="targetYield"
+          bindinput="onInputChange"
+        />
+        <text wx:if="{{errors.targetYield}}" class="error-text">{{errors.targetYield}}</text>
+      </view>
+
+      <view class="input-group">
+        <text class="input-label">种植面积 (亩)</text>
+        <input 
+          class="input-field {{errors.area ? 'input-error' : ''}}"
+          type="digit"
+          value="{{formData.area}}"
+          data-field="area"
+          bindinput="onInputChange"
+        />
+        <text wx:if="{{errors.area}}" class="error-text">{{errors.area}}</text>
+      </view>
+    </view>
+
+    <!-- 生成按钮 -->
+    <button class="btn-primary generate-btn" bindtap="generatePlan">
+      生成施肥方案
+    </button>
+
+    <!-- 使用说明 -->
+    <view class="tips-card">
+      <view class="tips-title">💡 使用提示</view>
+      <view class="tips-content">
+        <text>• 请先进行土壤检测，获取准确的养分数据</text>
+        <text>• 推荐方案仅供参考，请结合田间实际情况调整</text>
+        <text>• 建议配合有机肥使用，效果更佳</text>
+      </view>
+    </view>
+  </view>
+</view>
